@@ -40,4 +40,11 @@ export default {
         transform: scale(1.1);
     }
 
+    .card-body{
+        background-color: rgba(212,143,56,255);
+
+        .card-title,{
+            color: #fff;
+    }}
+
 </style>

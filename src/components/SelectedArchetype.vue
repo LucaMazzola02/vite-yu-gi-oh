@@ -4,21 +4,19 @@ export default {
     name: 'SelectedArchetype',
     data(){
       return {
+        searchedText : '',
 
       }
-    },
+    }
 }
 </script>
 
 <template>
     <div class="container">
         <div class="row py-4">
-            <select class=" selected form-select " aria-label="Default select example">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-            </select>
+            <input type="text" class="form-control" placeholder="Character name" aria-label="Character name" aria-describedby="basic-addon1"  v-model="searchedText"
+
+                @keyup.enter="$emit('searched', searchedText)">
         </div>
     </div>
     

@@ -8,6 +8,7 @@ export default {
     data(){
       return {
         apiUrl: 'https://db.ygoprodeck.com/api/v7/cardinfo.php?num=39&offset=0',
+        newApiUrl: 'https://db.ygoprodeck.com/api/v7/archetypes.php?num=39&offset=0',
         cardsList : [],
 
       }
@@ -16,21 +17,42 @@ export default {
         CardList,  
         SelectedArchetype,   
     },
-    created(){
-        axios.get(this.apiUrl)
+    methods : {
+        selectedCards(){
+            axios.get(this.ApiUrl)
               .then( (response) => {
                     this.cardsList = response.data.data;
                 })
                 .catch(function (error) {
                     console.log(error);
                 })
-    }
+
+        },
+        searchArchetype(needle = ''){
+            axios.get(this.newApiUrl,{
+                    params: {
+                        type : needle
+                    }
+                })
+                .then( (response) => {
+                    this.cardsList = response.data.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+
+        }
+    },
+    created(){
+        this.selectedCards();
+        this.searchArchetype();
+    },
 }
 </script>
 
 <template>
     <main>
-        <SelectedArchetype />
+        <SelectedArchetype @searched="selectedCards" />
         <div class="container bg-light p-5">
             <div class="row title mb-3">
                     <h2>Found 39 cards</h2>

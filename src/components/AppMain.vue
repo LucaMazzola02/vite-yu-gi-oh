@@ -1,58 +1,6 @@
-<script>
-import CardList from './CardsList.vue';
-import SelectedArchetype from './SelectedArchetype.vue';
-import axios from 'axios';
-
-export default {
-    name: 'AppMain',
-    data(){
-      return {
-        apiUrl: 'https://db.ygoprodeck.com/api/v7/cardinfo.php?num=39&offset=0',
-        newApiUrl: 'https://db.ygoprodeck.com/api/v7/archetypes.php?num=39&offset=0',
-        cardsList : [],
-
-      }
-    },
-    components: {
-        CardList,  
-        SelectedArchetype,   
-    },
-    methods : {
-        selectedCards(){
-            axios.get(this.ApiUrl)
-              .then( (response) => {
-                    this.cardsList = response.data.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
-
-        },
-        searchArchetype(needle = ''){
-            axios.get(this.newApiUrl,{
-                    params: {
-                        type : needle
-                    }
-                })
-                .then( (response) => {
-                    this.cardsList = response.data.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
-
-        }
-    },
-    created(){
-        this.selectedCards();
-        this.searchArchetype();
-    },
-}
-</script>
-
 <template>
     <main>
-        <SelectedArchetype @searched="selectedCards" />
+        <SelectedArchetype @filteredCards="getCardsFromFilter" />
         <div class="container bg-light p-5">
             <div class="row title mb-3">
                     <h2>Found 39 cards</h2>
@@ -64,6 +12,55 @@ export default {
         
     </main> 
 </template>
+
+<script>
+import CardList from './CardsList.vue';
+import SelectedArchetype from './SelectedArchetype.vue';
+import axios from 'axios';
+
+export default {
+    name: 'AppMain',
+    data(){
+      return {
+        apiUrl: 'https://db.ygoprodeck.com/api/v7/cardinfo.php',
+        cardsList : [],
+
+      }
+    },
+    components: {
+        CardList,  
+        SelectedArchetype,   
+    },
+
+    methods : {
+        getCardsFromFilter(filter){
+            axios.get(this.apiUrl, {
+                params: {
+                    num: 40,
+                    offset: 0,
+                    archetype : filter
+                }
+            })
+                .then( (response) => {
+                    // handle success
+                    this.cardsList = response.data.data;
+                    console.log(this.cardsList);
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                });
+
+        }
+
+    },
+    created(){
+        this.getCardsFromFilter();
+    },
+}
+</script>
+
+
 
 <style lang="scss" scoped>
 
